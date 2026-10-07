@@ -26,3 +26,9 @@ jobs:
 
       - name: Run tests
         run: python -m pytest -v
+
+      - name: Build Docker image
+        run: docker build -t devops-production-lab:${{ github.sha }} .
+
+      - name: Verify Docker image
+        run: docker image inspect devops-production-lab:${{ github.sha }}
