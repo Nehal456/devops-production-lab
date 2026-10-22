@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    container_name: devops-monitoring-app
+    ports:
+      - "5000:5000"
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: devops-prometheus
+    ports:
+      - "9000:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - app
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: devops-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_CSRF_TRUSTED_ORIGINS: "3000-cs-377060436322-default.cs-asia-southeast1-seal.cloudshell.dev"
+    depends_on:
+      - prometheus
